@@ -1,98 +1,153 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { router } from "expo-router";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+export default function SplashScreen() {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.replace("/download");
+    }, 1800);
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+    <View style={styles.container}>
+      <View style={styles.glowPink} />
+      <View style={styles.glowCyan} />
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+      <View style={styles.logoWrapper}>
+        <View style={styles.logoPink} />
+        <View style={styles.logoCyan} />
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+        <View style={styles.logo}>
+          <Text style={styles.logoText}>T</Text>
+        </View>
+      </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+      <Text style={styles.title}>TikDown</Text>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+      <Text style={styles.subtitle}>
+        Download. Save. Share.
+      </Text>
+
+      <View style={styles.dots}>
+        <View style={[styles.dot, styles.pinkDot]} />
+        <View style={[styles.dot, styles.cyanDot]} />
+        <View style={[styles.dot, styles.purpleDot]} />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    backgroundColor: "#111111",
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+
+  glowPink: {
+    position: "absolute",
+    width: 230,
+    height: 230,
+    borderRadius: 115,
+    backgroundColor: "#FE2C55",
+    opacity: 0.12,
+    top: 90,
+    left: -100,
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+
+  glowCyan: {
+    position: "absolute",
+    width: 260,
+    height: 260,
+    borderRadius: 130,
+    backgroundColor: "#25F4EE",
+    opacity: 0.1,
+    bottom: 70,
+    right: -120,
   },
+
+  logoWrapper: {
+    width: 105,
+    height: 105,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 22,
+  },
+
+  logoPink: {
+    position: "absolute",
+    width: 82,
+    height: 82,
+    borderRadius: 24,
+    backgroundColor: "#FE2C55",
+    transform: [{ translateX: 7 }, { translateY: 7 }],
+  },
+
+  logoCyan: {
+    position: "absolute",
+    width: 82,
+    height: 82,
+    borderRadius: 24,
+    backgroundColor: "#25F4EE",
+    transform: [{ translateX: -7 }, { translateY: -7 }],
+  },
+
+  logo: {
+    width: 82,
+    height: 82,
+    borderRadius: 24,
+    backgroundColor: "#111111",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "#FFFFFF",
+  },
+
+  logoText: {
+    color: "#FFFFFF",
+    fontSize: 48,
+    fontWeight: "900",
+  },
+
   title: {
-    textAlign: 'center',
+    color: "#FFFFFF",
+    fontSize: 34,
+    fontWeight: "900",
+    letterSpacing: -1,
   },
-  code: {
-    textTransform: 'uppercase',
+
+  subtitle: {
+    color: "#AFAFAF",
+    fontSize: 15,
+    marginTop: 7,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+
+  dots: {
+    flexDirection: "row",
+    marginTop: 25,
+    gap: 7,
+  },
+
+  dot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+  },
+
+  pinkDot: {
+    backgroundColor: "#FE2C55",
+  },
+
+  cyanDot: {
+    backgroundColor: "#25F4EE",
+  },
+
+  purpleDot: {
+    backgroundColor: "#7C3AED",
   },
 });
